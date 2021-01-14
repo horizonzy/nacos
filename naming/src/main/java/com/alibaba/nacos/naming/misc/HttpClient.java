@@ -19,6 +19,7 @@ import com.alibaba.nacos.common.constant.HttpHeaderConsts;
 import com.alibaba.nacos.common.utils.HttpMethod;
 import com.alibaba.nacos.common.utils.IoUtils;
 import com.alibaba.nacos.common.utils.VersionUtils;
+import com.alibaba.nacos.core.auth.AuthHeaderUtil;
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
@@ -105,7 +106,7 @@ public class HttpClient {
             conn.setConnectTimeout(connectTimeout);
             conn.setReadTimeout(readTimeout);
             conn.setRequestMethod(method);
-
+            
             setHeaders(conn, headers, encoding);
 
             if (StringUtils.isNotBlank(body)) {
@@ -169,6 +170,9 @@ public class HttpClient {
                 builder.setHeader(header.split("=")[0], header.split("=")[1]);
             }
         }
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            builder.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
+        }
 
         builder.setHeader("Accept-Charset", "UTF-8");
 
@@ -190,6 +194,10 @@ public class HttpClient {
             for (String header : headers) {
                 builder.setHeader(header.split("=")[0], header.split("=")[1]);
             }
+        }
+    
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            builder.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
         }
 
         builder.setBody(content);
@@ -213,6 +221,10 @@ public class HttpClient {
             for (String header : headers) {
                 builder.setHeader(header.split("=")[0], header.split("=")[1]);
             }
+        }
+    
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            builder.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
         }
 
         builder.setBody(content.getBytes());
@@ -246,7 +258,11 @@ public class HttpClient {
             for (Map.Entry<String, String> entry : paramValues.entrySet()) {
                 nvps.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
             }
-
+    
+            if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+                httpost.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
+            }
+            
             httpost.setEntity(new UrlEncodedFormEntity(nvps, encoding));
             HttpResponse response = postClient.execute(httpost);
             HttpEntity entity = response.getEntity();
@@ -276,6 +292,10 @@ public class HttpClient {
                 builder.setHeader(headerKey, headers.get(headerKey));
             }
         }
+    
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            builder.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
+        }
 
         builder.setBody(content);
 
@@ -298,6 +318,10 @@ public class HttpClient {
             for (String headerKey : headers.keySet()) {
                 builder.setHeader(headerKey, headers.get(headerKey));
             }
+        }
+    
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            builder.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
         }
 
         builder.setBody(content);
@@ -325,6 +349,10 @@ public class HttpClient {
 
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 httpPut.setHeader(entry.getKey(), entry.getValue());
+            }
+    
+            if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+                httpPut.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
             }
 
             httpPut.setEntity(new StringEntity(new String(content, StandardCharsets.UTF_8), ContentType.create("application/json", StandardCharsets.UTF_8)));
@@ -356,6 +384,10 @@ public class HttpClient {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 httpGetWithEntity.setHeader(entry.getKey(), entry.getValue());
             }
+    
+            if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+                httpGetWithEntity.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
+            }
 
             httpGetWithEntity.setEntity(new StringEntity(content, ContentType.create("application/json", "UTF-8")));
             HttpResponse response = httpClient.execute(httpGetWithEntity);
@@ -382,6 +414,10 @@ public class HttpClient {
 
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 httpost.setHeader(entry.getKey(), entry.getValue());
+            }
+            
+            if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+                httpost.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
             }
 
             httpost.setEntity(new StringEntity(content, ContentType.create("application/json", "UTF-8")));
@@ -450,6 +486,10 @@ public class HttpClient {
             for (Iterator<String> iter = headers.iterator(); iter.hasNext(); ) {
                 conn.addRequestProperty(iter.next(), iter.next());
             }
+        }
+    
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            conn.addRequestProperty(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
         }
 
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset="

@@ -25,6 +25,7 @@ import com.alibaba.nacos.config.server.utils.PropertyUtil;
 import com.alibaba.nacos.config.server.utils.RunningConfigUtils;
 import com.alibaba.nacos.config.server.utils.event.EventDispatcher.AbstractEventListener;
 import com.alibaba.nacos.config.server.utils.event.EventDispatcher.Event;
+import com.alibaba.nacos.core.auth.AuthHeaderUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -146,6 +147,10 @@ public class AsyncNotifyService extends AbstractEventListener {
                         request.setHeader(NotifyService.NOTIFY_HEADER_OP_HANDLE_IP, LOCAL_IP);
                         if (task.isBeta) {
                             request.setHeader("isBeta", "true");
+                        }
+                        
+                        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+                            request.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
                         }
                         httpclient.execute(request, new AsyncNotifyCallBack(httpclient, task));
                     }

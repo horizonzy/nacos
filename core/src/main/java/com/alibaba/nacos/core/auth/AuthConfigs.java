@@ -51,13 +51,22 @@ public class AuthConfigs {
      */
     @Value("${nacos.core.auth.default.token.expire.seconds:1800}")
     private long tokenValidityInSeconds;
-
+    
     /**
      * Which auth system is in use
      */
     @Value("${nacos.core.auth.system.type:}")
     private String nacosAuthSystemType;
-
+    
+    @Value("${nacos.core.auth.server.identity.key:}")
+    private String serverIdentityKey;
+    
+    @Value(("${nacos.core.auth.server.identity.value:}"))
+    private String serverIdentityValue;
+    
+    @Value(("${nacos.core.auth.enable.userAgentAuthWhite:true}"))
+    private boolean enableUserAgentAuthWhite;
+    
     public String getSecretKey() {
         return secretKey;
     }
@@ -84,7 +93,19 @@ public class AuthConfigs {
         return BooleanUtils.toBoolean(reloadableConfigs.getProperties()
             .getProperty("nacos.core.auth.caching.enabled", "true"));
     }
-
+    
+    public String getServerIdentityKey() {
+        return serverIdentityKey;
+    }
+    
+    public String getServerIdentityValue() {
+        return serverIdentityValue;
+    }
+    
+    public boolean isEnableUserAgentAuthWhite() {
+        return enableUserAgentAuthWhite;
+    }
+    
     @Bean
     public FilterRegistrationBean authFilterRegistration() {
         FilterRegistrationBean<AuthFilter> registration = new FilterRegistrationBean<>();
