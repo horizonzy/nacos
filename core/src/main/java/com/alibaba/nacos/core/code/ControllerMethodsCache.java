@@ -77,6 +77,7 @@ public class ControllerMethodsCache {
                 }
                 for (String methodPath : requestMapping.value()) {
                     methods.put(requestMethods[0].name() + "-->" + classPath + methodPath, method);
+                    methods.put(requestMethods[0].name() + "-->" + classPath + methodPath + "/", method);
                 }
             }
         }
@@ -115,12 +116,12 @@ public class ControllerMethodsCache {
     private void put(RequestMethod requestMethod, String classPath, String[] requestPaths, Method method) {
         if (ArrayUtils.isEmpty(requestPaths)) {
             methods.put(requestMethod.name() + "-->" + classPath, method);
+            methods.put(requestMethod.name() + "-->" + classPath + "/", method);
             return;
         }
         for (String requestPath : requestPaths) {
-            String backupPath = requestPath + "/";
             methods.put(requestMethod.name() + "-->" + classPath + requestPath, method);
-            methods.put(requestMethod.name() + "-->" + classPath + backupPath, method);
+            methods.put(requestMethod.name() + "-->" + classPath + requestPath + "/", method);
         }
     }
 }
