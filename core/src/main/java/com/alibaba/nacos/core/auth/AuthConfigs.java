@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.alibaba.nacos.core.auth;
 
 import com.alibaba.nacos.core.env.ReloadableConfigs;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -36,16 +40,16 @@ import org.springframework.stereotype.Component;
 @Component
 @Configuration
 public class AuthConfigs {
-
+    
     @Autowired
     private ReloadableConfigs reloadableConfigs;
-
+    
     /**
      * secret key
      */
     @Value("${nacos.core.auth.default.token.secret.key:}")
     private String secretKey;
-
+    
     /**
      * Token validity time(seconds)
      */
@@ -70,28 +74,28 @@ public class AuthConfigs {
     public String getSecretKey() {
         return secretKey;
     }
-
+    
     public long getTokenValidityInSeconds() {
         return tokenValidityInSeconds;
     }
-
+    
     public String getNacosAuthSystemType() {
         return nacosAuthSystemType;
     }
-
+    
     public boolean isAuthEnabled() {
         // Runtime -D parameter has higher priority:
         String enabled = System.getProperty("nacos.core.auth.enabled");
         if (StringUtils.isNotBlank(enabled)) {
             return BooleanUtils.toBoolean(enabled);
         }
-        return BooleanUtils.toBoolean(reloadableConfigs.getProperties()
-            .getProperty("nacos.core.auth.enabled", "false"));
+        return BooleanUtils
+                .toBoolean(reloadableConfigs.getProperties().getProperty("nacos.core.auth.enabled", "false"));
     }
-
+    
     public boolean isCachingEnabled() {
-        return BooleanUtils.toBoolean(reloadableConfigs.getProperties()
-            .getProperty("nacos.core.auth.caching.enabled", "true"));
+        return BooleanUtils
+                .toBoolean(reloadableConfigs.getProperties().getProperty("nacos.core.auth.caching.enabled", "true"));
     }
     
     public String getServerIdentityKey() {
@@ -113,13 +117,31 @@ public class AuthConfigs {
         registration.addUrlPatterns("/*");
         registration.setName("authFilter");
         registration.setOrder(6);
-
+        
         return registration;
     }
-
+    
     @Bean
     public AuthFilter authFilter() {
         return new AuthFilter();
     }
-
+    
+    @Component
+    public static class AuthHeaderUtil implements ApplicationContextAware {
+        
+        private static AuthConfigs authConfigs;
+        
+        public static String getServerIdentityKey() {
+            return authConfigs.getServerIdentityKey();
+        }
+        
+        public static String getServerIdentityValue() {
+            return authConfigs.getServerIdentityValue();
+        }
+        
+        @Override
+        public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+            AuthHeaderUtil.authConfigs = applicationContext.getBean(AuthConfigs.class);
+        }
+    }
 }
