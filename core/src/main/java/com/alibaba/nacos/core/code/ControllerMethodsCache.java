@@ -35,8 +35,7 @@ import java.util.concurrent.ConcurrentMap;
 @Component
 public class ControllerMethodsCache {
 
-    private ConcurrentMap<String, Method> methods = new
-        ConcurrentHashMap<>();
+    private ConcurrentMap<String, Method> methods = new ConcurrentHashMap<>();
 
     public ConcurrentMap<String, Method> getMethods() {
         return methods;
@@ -119,7 +118,9 @@ public class ControllerMethodsCache {
             return;
         }
         for (String requestPath : requestPaths) {
+            String backupPath = requestPath + "/";
             methods.put(requestMethod.name() + "-->" + classPath + requestPath, method);
+            methods.put(requestMethod.name() + "-->" + classPath + backupPath, method);
         }
     }
 }
