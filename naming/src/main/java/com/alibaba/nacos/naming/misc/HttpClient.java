@@ -19,7 +19,7 @@ import com.alibaba.nacos.common.constant.HttpHeaderConsts;
 import com.alibaba.nacos.common.utils.HttpMethod;
 import com.alibaba.nacos.common.utils.IoUtils;
 import com.alibaba.nacos.common.utils.VersionUtils;
-import com.alibaba.nacos.core.auth.AuthConfigs;
+import com.alibaba.nacos.core.auth.AuthHeaderUtil;
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
@@ -170,8 +170,8 @@ public class HttpClient {
                 builder.setHeader(header.split("=")[0], header.split("=")[1]);
             }
         }
-        if (StringUtils.isNotBlank(AuthConfigs.AuthHeaderUtil.getServerIdentityKey())) {
-            builder.setHeader(AuthConfigs.AuthHeaderUtil.getServerIdentityKey(), AuthConfigs.AuthHeaderUtil.getServerIdentityValue());
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            builder.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
         }
 
         builder.setHeader("Accept-Charset", "UTF-8");
@@ -196,8 +196,8 @@ public class HttpClient {
             }
         }
     
-        if (StringUtils.isNotBlank(AuthConfigs.AuthHeaderUtil.getServerIdentityKey())) {
-            builder.setHeader(AuthConfigs.AuthHeaderUtil.getServerIdentityKey(), AuthConfigs.AuthHeaderUtil.getServerIdentityValue());
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            builder.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
         }
 
         builder.setBody(content);
@@ -223,8 +223,8 @@ public class HttpClient {
             }
         }
     
-        if (StringUtils.isNotBlank(AuthConfigs.AuthHeaderUtil.getServerIdentityKey())) {
-            builder.setHeader(AuthConfigs.AuthHeaderUtil.getServerIdentityKey(), AuthConfigs.AuthHeaderUtil.getServerIdentityValue());
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            builder.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
         }
 
         builder.setBody(content.getBytes());
@@ -259,8 +259,8 @@ public class HttpClient {
                 nvps.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
             }
     
-            if (StringUtils.isNotBlank(AuthConfigs.AuthHeaderUtil.getServerIdentityKey())) {
-                httpost.setHeader(AuthConfigs.AuthHeaderUtil.getServerIdentityKey(), AuthConfigs.AuthHeaderUtil.getServerIdentityValue());
+            if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+                httpost.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
             }
             
             httpost.setEntity(new UrlEncodedFormEntity(nvps, encoding));
@@ -293,8 +293,8 @@ public class HttpClient {
             }
         }
     
-        if (StringUtils.isNotBlank(AuthConfigs.AuthHeaderUtil.getServerIdentityKey())) {
-            builder.setHeader(AuthConfigs.AuthHeaderUtil.getServerIdentityKey(), AuthConfigs.AuthHeaderUtil.getServerIdentityValue());
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            builder.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
         }
 
         builder.setBody(content);
@@ -320,8 +320,8 @@ public class HttpClient {
             }
         }
     
-        if (StringUtils.isNotBlank(AuthConfigs.AuthHeaderUtil.getServerIdentityKey())) {
-            builder.setHeader(AuthConfigs.AuthHeaderUtil.getServerIdentityKey(), AuthConfigs.AuthHeaderUtil.getServerIdentityValue());
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            builder.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
         }
 
         builder.setBody(content);
@@ -351,8 +351,8 @@ public class HttpClient {
                 httpPut.setHeader(entry.getKey(), entry.getValue());
             }
     
-            if (StringUtils.isNotBlank(AuthConfigs.AuthHeaderUtil.getServerIdentityKey())) {
-                httpPut.setHeader(AuthConfigs.AuthHeaderUtil.getServerIdentityKey(), AuthConfigs.AuthHeaderUtil.getServerIdentityValue());
+            if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+                httpPut.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
             }
 
             httpPut.setEntity(new StringEntity(new String(content, StandardCharsets.UTF_8), ContentType.create("application/json", StandardCharsets.UTF_8)));
@@ -385,9 +385,8 @@ public class HttpClient {
                 httpGetWithEntity.setHeader(entry.getKey(), entry.getValue());
             }
     
-            if (StringUtils.isNotBlank(AuthConfigs.AuthHeaderUtil.getServerIdentityKey())) {
-                httpGetWithEntity.setHeader(AuthConfigs.AuthHeaderUtil.getServerIdentityKey(), AuthConfigs.AuthHeaderUtil
-                        .getServerIdentityValue());
+            if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+                httpGetWithEntity.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
             }
 
             httpGetWithEntity.setEntity(new StringEntity(content, ContentType.create("application/json", "UTF-8")));
@@ -417,8 +416,8 @@ public class HttpClient {
                 httpost.setHeader(entry.getKey(), entry.getValue());
             }
             
-            if (StringUtils.isNotBlank(AuthConfigs.AuthHeaderUtil.getServerIdentityKey())) {
-                httpost.setHeader(AuthConfigs.AuthHeaderUtil.getServerIdentityKey(), AuthConfigs.AuthHeaderUtil.getServerIdentityValue());
+            if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+                httpost.setHeader(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
             }
 
             httpost.setEntity(new StringEntity(content, ContentType.create("application/json", "UTF-8")));
@@ -489,8 +488,8 @@ public class HttpClient {
             }
         }
     
-        if (StringUtils.isNotBlank(AuthConfigs.AuthHeaderUtil.getServerIdentityKey())) {
-            conn.addRequestProperty(AuthConfigs.AuthHeaderUtil.getServerIdentityKey(), AuthConfigs.AuthHeaderUtil.getServerIdentityValue());
+        if (StringUtils.isNotBlank(AuthHeaderUtil.getServerIdentityKey())) {
+            conn.addRequestProperty(AuthHeaderUtil.getServerIdentityKey(), AuthHeaderUtil.getServerIdentityValue());
         }
 
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset="
